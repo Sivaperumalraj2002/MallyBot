@@ -1,0 +1,131 @@
+#:kivy 2.1.0
+ScreenManager:
+    LoginScreen:
+    RegisterScreen:
+    ChatScreen:
+        name:'chat'
+    
+
+<ChatScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+
+            Label:
+                id: chat_log
+                text: root.chat_history
+                font_size: 16
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None
+                markup: True
+                colour:1,1,1,0.1
+
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            TextInput:
+                id: user_input
+                multiline: True
+                hint_text: "Let's we chat"
+                font_size: 16
+
+            Button:
+                text: 'Send'
+                size_hint_x: None
+                width: 80
+                #on_press: root.send_message()
+                on_press: root.chatStream()
+
+<LoginScreen>:
+    name: 'login'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 50
+        spacing: 20
+
+        Label:
+            text: 'Login'
+            font_size: 32
+        BoxLayout:
+            Label:
+                text: 'Username'
+                color: 1, 0, 0, 1
+            TextInput:
+                id: login_username
+                hint_text: 'Username'
+                multiline: False
+        BoxLayout:
+            Label:
+                text: 'Password'
+                color: 1, 0, 0, 1
+            TextInput:
+                id: login_password
+                hint_text: 'Password'
+                password: True
+                multiline: False
+
+        Label:
+            id: login_msg
+            text: ''
+            color: 1, 0, 0, 1
+
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                text: 'Login'
+                on_press: root.do_login()
+
+            Button:
+                text: 'Register'
+                on_press: app.root.current = 'register'
+
+<RegisterScreen>:
+    name: 'register'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 50
+        spacing: 20
+
+        Label:
+            text: 'Register'
+            font_size: 32
+
+        TextInput:
+            id: reg_username
+            hint_text: 'Choose a username'
+            multiline: False
+
+        TextInput:
+            id: reg_password
+            hint_text: 'Choose a password'
+            password: True
+            multiline: False
+
+        Label:
+            id: reg_msg
+            text: ''
+            color: 0, 1, 0, 1
+
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                text: 'Register'
+                on_press: root.do_register()
+
+            Button:
+                text: 'Back to Login'
+                on_press: app.root.current = 'login'
