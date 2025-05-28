@@ -4,68 +4,13 @@ ScreenManager:
     RegisterScreen:
     ChatScreen:
         name:'chat'
-    
-# <ChatScreen>:
-#     BoxLayout:
-#         orientation: 'vertical'
-#         padding: dp(10)
-#         spacing: dp(10)
-#         canvas.before:
-#             Color:
-#                 rgba: 0.97, 0.97, 0.97, 1  # Light background
-#             Rectangle:
-#                 pos: self.pos
-#                 size: self.size
-
-#         BoxLayout:
-#             orientation: 'vertical'
-#             size_hint_y: 0.92
-
-#             ScrollView:
-#                 do_scroll_x: False
-#                 do_scroll_y: True
-#                 bar_width: dp(5)
-
-#                 Label:
-#                     id: chat_log
-#                     text: root.chat_history
-#                     font_size: '16sp'
-#                     size_hint_y: None
-#                     height: self.texture_size[1]
-#                     text_size: self.width - dp(20), None
-#                     markup: True
-#                     color: 0.1, 0.1, 0.1, 1  # Dark text
-#                     padding: dp(10), dp(10)
-
-#         BoxLayout:
-#             size_hint_y: 0.08
-#             spacing: dp(10)
-#             padding: dp(5)
-
-#             TextInput:
-#                 id: user_input
-#                 hint_text: "Type your message here..."
-#                 multiline: False
-#                 font_size: '16sp'
-#                 size_hint_x: 0.85
-#                 background_normal: ''
-#                 background_color: 1, 1, 1, 1
-#                 foreground_color: 0, 0, 0, 1
-#                 padding_y: dp(10)
-
-#             Button:
-#                 text: 'Send'
-#                 size_hint_x: 0.15
-#                 background_color: 0.2, 0.6, 0.86, 1
-#                 color: 1, 1, 1, 1
-#                 bold: True
-#                 on_press: root.chatStream()
 
 <ChatScreen>:
     BoxLayout:
         orientation: 'vertical'
         padding: dp(10)
         spacing: dp(10)
+        padding: dp(5)
         canvas.before:
             Color:
                 rgba: 0.97, 0.97, 0.97, 1
@@ -84,6 +29,14 @@ ScreenManager:
                 size_hint_x: None
                 width: dp(120)
                 on_press: root.open_chat_history()
+            Button:
+                text: 'Logout'
+                size_hint_x: None
+                width: dp(120)
+                on_press: 
+                    app.root.current = 'login'; root.new_session_id()
+                # on_press: root.new_session_id()
+                # on_release: root.new_session_id()
 
         # Chat messages display
         BoxLayout:
