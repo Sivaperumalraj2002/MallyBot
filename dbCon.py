@@ -1,6 +1,32 @@
 
 import pymysql
 
+
+def chatHistory(username):
+    try:
+        db = pymysql.connect(
+            host="localhost",
+            user="root",
+            password="miraj",
+            database="mally"
+        )
+        print('DB Connection Established...')
+    except Exception as e:
+        print('Connection failed: ',e)
+    else:
+        cursor=db.cursor()
+        cursor.execute('select session, event from history where username = %s',(username))
+        data=cursor.fetchall()
+    finally:
+        if db.open:
+            cursor.close()
+            db.close()
+            print('DB Connection Closed.')
+    # print(type(data))
+    # # for i in data:
+    # #     print(i)   
+    # print(data)
+    return data
 def getUser(user):
     try:
         db = pymysql.connect(
@@ -54,7 +80,7 @@ def regUser(username,password):
         return False
     return True
 
-def chatHistoryLog(username,model,prompt,response,mood):
+def chatHistoryLog(username,model,prompt,response,mood,session):
     try:
         db = pymysql.connect(
             host="localhost",
@@ -68,7 +94,7 @@ def chatHistoryLog(username,model,prompt,response,mood):
         print('Connection failed: ',e)
     else:
         cursor=db.cursor()
-        cursor.execute('insert into log (username,model,prompt,response,mood) values (%s,%s,%s,%s,%s)',(username,model,prompt,response,mood))
+        cursor.execute('insert into log (username,model,prompt,response,mood,session) values (%s,%s,%s,%s,%s,%s)',(username,model,prompt,response,mood,session))
         db.commit()
         print('Registration Successfull.')
     finally:
