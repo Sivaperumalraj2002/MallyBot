@@ -11,9 +11,7 @@ from dbCon import chatHistoryLog
 import threading
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import dp
 import uuid
 from dbCon import chatHistory
@@ -191,3 +189,8 @@ class ChatScreen(Screen):
 
         # Start background thread
         threading.Thread(target=stream_response, daemon=True).start()
+    
+    # to clear chat while logout
+    def clearChat(self):
+        self.ids.chat_log.text=''
+        self.chat_history=''

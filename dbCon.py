@@ -97,12 +97,40 @@ def chatHistoryLog(username,model,prompt,response,mood,session):
         cursor=db.cursor()
         cursor.execute('insert into log (username,model,prompt,response,mood,session) values (%s,%s,%s,%s,%s,%s)',(username,model,prompt,response,mood,session))
         db.commit()
-        print('Registration Successfull.')
     finally:
         if db.open:
             cursor.close()
             db.close()
             print('DB Connection Closed.') 
+
+def getSentimentalReport(user):
+    try:
+        db = pymysql.connect(
+            host="localhost",
+            user="root",
+            password="miraj",
+            database="mally"
+        )
+        print('DB Connection Established...')
+    except Exception as e:
+        print('Connection failed: ',e)
+    else:
+        cursor=db.cursor()
+        cursor.execute('select date,mood from sentiment where username = %s',(user,))
+        data=cursor.fetchall()
+        if data is None:
+            return None
+        f_data=[]
+        for date,deci in data:
+            f_data.append([str(date),str(deci)])
+    finally:
+        if db.open:
+            cursor.close()
+            db.close()
+            print('DB Connection Closed.')
+    return f_data
+
+
 
 # cursor = db.cursor()
 # cursor.execute("SELECT * FROM user")
