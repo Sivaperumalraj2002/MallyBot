@@ -4,13 +4,69 @@ ScreenManager:
     RegisterScreen:
     ChatScreen:
         name:'chat'
+    DashboardScreen:
+        name:'dashboard'
+
+<DashboardScreen>:
+    BoxLayout:
+        orientation:'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(10)
+            spacing: dp(10)
+            padding: dp(2)
+            canvas.before:
+                Color:
+                    rgba: 0.97, 0.97, 0.97, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            # Top Bar with Chat History Button
+            BoxLayout:
+                size_hint_y: None
+                height: dp(25)
+                spacing: dp(5)
+
+                Button:
+                    text: ''
+                    size_hint_x: None
+                    width: dp(20)
+                    padding: dp(1)
+                    on_press: app.root.ids.ChatScreen.open_chat_history()
+                    color: 0.3, 0.3, 0.3, 1
+                    background_normal: 'buttonIMG/img.png'
+                    background_color: 0.83, 0.83, 0.83, 0.95
+                    bold: True
+                Button:
+                    text: 'Chat'
+                    size_hint_x: None
+                    width: dp(65)
+                    on_press: 
+                    background_normal: ''
+                    background_color: 0.83, 0.83, 0.83, 0.95
+                    bold: True
+                    color: 0.3, 0.3, 0.3, 1
+                    on_press: app.root.current = 'chat'
+                Button:
+                    text: 'Logout'
+                    size_hint_x: None
+                    width: dp(65)
+                    on_press: 
+                        app.root.current = 'login'; root.new_session_id()
+                    background_normal: ''
+                    background_color: 0.83, 0.83, 0.83, 0.95
+                    bold: True
+                    color: 0.3, 0.3, 0.3, 1
+            BoxLayout:
+                orientation:'vertical'
 
 <ChatScreen>:
     BoxLayout:
         orientation: 'vertical'
         padding: dp(10)
         spacing: dp(10)
-        padding: dp(5)
+        padding: dp(2)
         canvas.before:
             Color:
                 rgba: 0.97, 0.97, 0.97, 1
@@ -21,22 +77,40 @@ ScreenManager:
         # Top Bar with Chat History Button
         BoxLayout:
             size_hint_y: None
-            height: dp(40)
-            spacing: dp(10)
+            height: dp(25)
+            spacing: dp(5)
 
             Button:
-                text: 'Chat History'
+                text: ''
                 size_hint_x: None
-                width: dp(120)
+                width: dp(20)
+                padding: dp(1)
                 on_press: root.open_chat_history()
+                color: 0.3, 0.3, 0.3, 1
+                background_normal: 'buttonIMG/img.png'
+                background_color: 0.83, 0.83, 0.83, 0.95
+                bold: True
+            Button:
+                text: 'Report'
+                size_hint_x: None
+                width: dp(65)
+                on_press: 
+                background_normal: ''
+                background_color: 0.83, 0.83, 0.83, 0.95
+                bold: True
+                color: 0.3, 0.3, 0.3, 1
+                on_press: app.root.current = 'dashboard'
             Button:
                 text: 'Logout'
                 size_hint_x: None
-                width: dp(120)
+                width: dp(65)
                 on_press: 
                     app.root.current = 'login'; root.new_session_id()
-                # on_press: root.new_session_id()
-                # on_release: root.new_session_id()
+                background_normal: ''
+                background_color: 0.83, 0.83, 0.83, 0.95
+                bold: True
+                color: 0.3, 0.3, 0.3, 1
+
 
         # Chat messages display
         BoxLayout:

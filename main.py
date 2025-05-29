@@ -4,6 +4,7 @@ from kivy.lang import Builder
 import chatScreen
 import loginScreen
 import registerScreen
+import dashboardScreen
 
 class BotApp(App):
     def build(self):

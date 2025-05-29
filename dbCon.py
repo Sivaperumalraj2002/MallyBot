@@ -27,6 +27,7 @@ def chatHistory(username):
     # #     print(i)   
     # print(data)
     return data
+
 def getUser(user):
     try:
         db = pymysql.connect(

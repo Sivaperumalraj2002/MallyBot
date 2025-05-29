@@ -1,30 +1,14 @@
-from kivy.uix.boxlayout import BoxLayout
-# from kivy.uix.button import Button
-# from kivy.uix.widget import Widget
-from kivy.uix.scrollview import ScrollView
-# from kivy.properties import StringProperty, BooleanProperty
-from textblob import TextBlob
-from textGen import llmOut
-from textGen import llmStream
 from kivy.uix.screenmanager import ScreenManager, Screen
-from dbCon import chatHistoryLog
-import threading
-from kivy.clock import Clock
-from kivy.uix.popup import Popup
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
-from kivy.metrics import dp
 import uuid
-from dbCon import chatHistory
-from kivy.uix.button import Button
 from kivy.utils import get_color_from_hex
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.popup import Popup
+from kivy.metrics import dp
+from kivy.uix.button import Button
 
 
-class ChatScreen(Screen):
-    llmModel='gemma3:1b'
-    chat_history = ""
-
+class DashboardScreen(Screen):
     # to create session id using uuid lybrary. it is called in chatHistoryLog()
     @staticmethod
     def sessionID():
@@ -40,24 +24,7 @@ class ChatScreen(Screen):
     @classmethod
     def new_session_id(cls):
         cls.session_ID=cls.sessionID()
-    def on_press_logout(self):
-        ChatScreen.new_session_id()
-    
-    # to load the past history in chatscreen. it is used in open_chat_history()
-    def on_history_button_press(self,item,popup):
-        popup.dismiss()
-        ChatScreen.session_ID=item[0]
-        self.chat_history=item[1]
-        self.ids.chat_log.text = self.chat_history
-    
-    # to initilize the new chat. it is called in open_chat_history()
-    def on_new_chat(self,popup):
-        popup.dismiss()
-        ChatScreen.session_ID=self.sessionID()
-        self.chat_history=''
-        self.ids.chat_log.text = self.chat_history
-
-    # this fuc called by clicking the chat history button
+     # this fuc called by clicking the chat history button
     def open_chat_history(self):
         # Main content layout
         content = BoxLayout(
@@ -138,56 +105,3 @@ class ChatScreen(Screen):
 
         # Open the styled popup
         popup.open()
-
-
-    # to send the msg to chat with out stream msg. so for it not used
-    def send_message(self):
-        with open('CurrentUser.txt','r') as f:
-            username=f.read()
-        user_text=self.ids.user_input.text.strip()
-        if not user_text:
-            return
-        self.chat_history += f"[b]You:[/b] {user_text}\n"
-        self.ids.user_input.text = ""
-        resp=llmOut(self.llmModel,user_text)
-        self.chat_history+=f'[b]MallyBot:[/b] {resp}\n'
-        self.ids.chat_log.text = self.chat_history
-        #(sentiment check)
-        blob = TextBlob(user_text)
-        polarity = blob.sentiment.polarity
-        print(polarity)
-        chatHistoryLog(username,self.llmModel,user_text,resp,polarity,ChatScreen.session_ID)
-    
-    # to steam the msg in chat screen
-    def chatStream(self):
-        with open('CurrentUser.txt', 'r') as f:
-            username = f.read()
-
-        user_text = self.ids.user_input.text.strip()
-        if not user_text:
-            return
-
-        self.chat_history += f"[b]You:[/b] {user_text}\n\n"
-        self.chat_history += f"[b]MallyBot:[/b] "
-        self.ids.user_input.text = ""
-        self.ids.chat_log.text = self.chat_history
-        start_idx = len(self.chat_history)
-
-        def stream_response():
-            for chunk in llmStream(self.llmModel, user_text):
-                text = chunk['message']['content']
-                Clock.schedule_once(lambda dt: update_chat_log(text))
-
-            # After the loop, do sentiment and logging
-            blob = TextBlob(user_text)
-            polarity = blob.sentiment.polarity
-            response_part = self.chat_history[start_idx:]
-            chatHistoryLog(username, self.llmModel, user_text, response_part, polarity,ChatScreen.session_ID)
-            update_chat_log('\n\n')
-
-        def update_chat_log(text):
-            self.chat_history += text
-            self.ids.chat_log.text = self.chat_history
-
-        # Start background thread
-        threading.Thread(target=stream_response, daemon=True).start()
