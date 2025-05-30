@@ -1,8 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout
-# from kivy.uix.button import Button
-# from kivy.uix.widget import Widget
 from kivy.uix.scrollview import ScrollView
-# from kivy.properties import StringProperty, BooleanProperty
 from textblob import TextBlob
 from textGen import llmOut
 from textGen import llmStream
@@ -11,7 +8,6 @@ from dbCon import chatHistoryLog
 import threading
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
-from kivy.uix.label import Label
 from kivy.metrics import dp
 import uuid
 from dbCon import chatHistory
